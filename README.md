@@ -7,12 +7,18 @@ This is an Umod plugin for Facepunch's Rust.
 
 
 <h2><a id="permissions" href="#permissions">#</a> Permissions</h2>
-* privateadminmessage.use - Send private message to admins
-* privateadminmessage.receive - Receive messages sent from players
+<ul>
+  <li>privateadminmessage.use - Send private message to admins</li>
+  <li>privateadminmessage.receive - Receive messages sent from players</li>
+</ul>
 
 <h2><a id="chatcommands" href="#chatcommands">#</a> Permissions</h2>
-* /pam <name> <message> - Send private message to admins
-* /am <message> - Send private message as admin to players
+<ul>
+  <li>/pam <name> <message> - Send private message to admins</li>
+  <li>/am <message> - Send private message as admin to players</li>
+</ul>
 
 <h2><a id="credits" href="#credits">#</a> Permissions</h2>
-* Icons created by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a>
+<ul>
+  <li>Icons created by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a></li>
+</ul>
