@@ -3,7 +3,7 @@
 This is an Umod plugin for Facepunch's Rust.  
   
   
-\*\*Private Admin Messages\*\* allows admins to send private messages to players via console/chat.  
+Private Admin Messages allows admins to send private messages to players via console/chat.  
   
   
 <h2><a id="permissions" href="#permissions">#</a> Permissions</h2>  
