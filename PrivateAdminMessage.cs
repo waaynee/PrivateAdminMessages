@@ -1,13 +1,9 @@
-﻿using System;
+﻿using Oxide.Core.Libraries.Covalence;
 using System.Collections.Generic;
-using System.Linq;
-using Oxide.Core;
-using Oxide.Core.Libraries.Covalence;
-using Oxide.Core.Plugins;
 
 namespace Oxide.Plugins
 {
-    [Info("PrivateAdminMessage", "waayne", "0.1.0")]
+    [Info("Private Admin Message", "waayne", "0.1.1")]
     [Description("Allows admins to send private messages to players via console/chat")]
     class PrivateAdminMessage : CovalencePlugin
     {
@@ -18,6 +14,14 @@ namespace Oxide.Plugins
 
             if (!permission.PermissionExists("privateadminmessage.receive", this))
                 permission.RegisterPermission("privateadminmessage.receive", this);
+        }
+        protected override void LoadDefaultMessages()
+        {
+            lang.RegisterMessages(new Dictionary<string, string>
+            {
+                ["AdminToPlayerMessageSent"] = "Admin to {0}: {1}\n(reply via /am <message>)",
+                ["PlayerToAdminMessageSent"] = "{0} to Admin: {1}"
+            }, this);
         }
 
         [Command("pam"), Permission("privateadminmessage.use")]
@@ -32,9 +36,8 @@ namespace Oxide.Plugins
                     message += " " + args[i];
                 }
 
-                IPlayer receiver = FindPlayer(receiverName);
-                receiver.Reply($"Admin to {receiverName}: {message}");
-                receiver.Reply("(reply via /am <message>)");
+                IPlayer receiver = covalence.Players.FindPlayer(receiverName);
+                receiver.Reply(string.Format(lang.GetMessage("AdminToPlayerMessageSent", this, player.Id), receiverName, message));
                 Puts($"You to {receiverName}: {message}");
             }
         }
@@ -50,35 +53,16 @@ namespace Oxide.Plugins
                     message += " " + args[i];
                 }
 
+                string replyMessage = string.Format(lang.GetMessage("PlayerToAdminMessageSent", this, player.Id), player.Name, message);
                 foreach (var connectedPlayer in covalence.Players.Connected)
                 {
                     if (connectedPlayer.HasPermission("privateadminmessage.receive"))
                     {
-                        connectedPlayer.Reply($"{player.Name} to Admin: {message}");
+                        connectedPlayer.Reply(replyMessage);
                     }
                 }
-
-                Puts($"{player.Name} to Admin: {message}");
+                Puts(replyMessage);
             }
         }
-
-        #region Helper
-        private IPlayer FindPlayer(string nameOrIdOrIp)
-        {
-            foreach (var activePlayer in covalence.Players.Connected)
-            {
-                if (activePlayer.Id == nameOrIdOrIp)
-                    return activePlayer;
-                if (activePlayer.Name.Contains(nameOrIdOrIp))
-                    return activePlayer;
-                if (activePlayer.Name.ToLower().Contains(nameOrIdOrIp.ToLower()))
-                    return activePlayer;
-                if (activePlayer.Address == nameOrIdOrIp)
-                    return activePlayer;
-            }
-
-            return null;
-        }
-        #endregion
     }
 }
