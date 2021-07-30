@@ -4,8 +4,8 @@ Private Admin Messages allows admins to send private messages to players via con
   
   
 ## Permissions
- * privateadminmessage.use - Send private message to admins
- * privateadminmessage.receive - Receive messages sent from players
+ * `privateadminmessage.use` - Send private message to admins
+ * `privateadminmessage.receive` - Receive messages sent from players
 
 ## Chat Commands  
   
