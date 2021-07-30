@@ -87,7 +87,7 @@ namespace Oxide.Plugins
 
                 foreach (IPlayer connectedPlayer in covalence.Players.Connected)
                 {
-                    if (connectedPlayer.HasPermission("privateadminmessage.receive"))
+                    if (connectedPlayer.HasPermission(PRIVATE_ADMIN_MESSAGE_RECEIVE))
                     {
                         connectedPlayer.Reply(string.Format(lang.GetMessage("SentUserToAdmin", this, connectedPlayer.Id), player.Name, message));
                         if (!wasSent) wasSent = true;
