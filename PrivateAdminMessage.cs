@@ -25,8 +25,7 @@ namespace Oxide.Plugins
                 ["SentAdminToYou"] = "Admin to you: {0}\n(reply via /am <message>)",
                 ["SentYouToAdmin"] = "You to Admin: {0}",
                 ["SentUserToAdmin"] = "{0} to Admin: {1}",
-                ["NoUserFound"] = "User not found",
-                ["NoUserOnline"] = "User is currently not online",
+                ["NoUserFoundOrOnline"] = "User not found or is currently not online",
                 ["NoMessageProvided"] = "No message was provided",
                 ["NoAdminOnline"] = "There is currently no admin online",
                 ["Help"] = "Use /pam <name> <message> to write a message to an admin"
@@ -51,7 +50,11 @@ namespace Oxide.Plugins
                 for (int i = 2; i < args.Length; i++)
                     message += " " + args[i];
 
-                IPlayer receiver = covalence.Players.FindPlayer(receiverName);
+                IPlayer receiver = null;
+                foreach(IPlayer connectedPlayer in covalence.Players.Connected)
+                {
+                    if (connectedPlayer.Name == receiverName) receiver = connectedPlayer;
+                }
                 if (receiver != null)
                 {
                     if (receiver.IsConnected)
@@ -61,12 +64,12 @@ namespace Oxide.Plugins
                     }
                     else
                     {
-                        player.Reply(lang.GetMessage("NoUserOnline", this, player.Id));
+                        player.Reply(lang.GetMessage("NoUserFoundOrOnline", this, player.Id));
                     }
                 }
                 else
                 {
-                    player.Reply(lang.GetMessage("NoUserFound", this, player.Id));
+                    player.Reply(lang.GetMessage("NoUserFoundOrOnline", this, player.Id));
                 }
             }
         }
