@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Oxide.Plugins
 {
-    [Info("Private Admin Message", "waayne", "0.1.2")]
+    [Info("Private Admin Message", "waayne", "0.1.3")]
     [Description("Allows admins to send private messages to players via console/chat")]
     internal class PrivateAdminMessage : CovalencePlugin
     {
