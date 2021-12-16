@@ -1,6 +1,6 @@
-# PrivateAdminMessages  
+# Private Admin Message
   
-Private Admin Messages allows admins to send private messages to players via console/chat.  
+Private Admin Message allows admins to send private messages to players via console/chat.  
   
   
 ## Permissions
