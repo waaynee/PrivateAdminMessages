@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Oxide.Plugins
 {
-    [Info("Private Admin Message", "waayne", "0.1.3")]
+    [Info("Private Admin Message", "waayne", "0.1.4")]
     [Description("Allows admins to send private messages to players via console/chat")]
     internal class PrivateAdminMessage : CovalencePlugin
     {
@@ -14,6 +14,7 @@ namespace Oxide.Plugins
         {
             permission.RegisterPermission(PRIVATE_ADMIN_MESSAGE_RECEIVE, this);
 
+            AddCovalenceCommand("privateadminmessage.pam", nameof(AdminToPlayerMessageCommand), PRIVATE_ADMIN_MESSAGE);
             AddCovalenceCommand("pam", nameof(AdminToPlayerMessageCommand), PRIVATE_ADMIN_MESSAGE);
             AddCovalenceCommand("am", nameof(PlayerToAdminMessageCommand));
         }
