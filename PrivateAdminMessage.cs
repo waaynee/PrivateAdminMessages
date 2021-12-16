@@ -1,9 +1,9 @@
-﻿using Oxide.Core.Libraries.Covalence;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Plugins
 {
-    [Info("Private Admin Message", "waayne", "0.1.4")]
+    [Info("Private Admin Message", "waayne", "0.2.0")]
     [Description("Allows admins to send private messages to players via console/chat")]
     internal class PrivateAdminMessage : CovalencePlugin
     {
@@ -18,6 +18,7 @@ namespace Oxide.Plugins
             AddCovalenceCommand("pam", nameof(AdminToPlayerMessageCommand), PRIVATE_ADMIN_MESSAGE);
             AddCovalenceCommand("am", nameof(PlayerToAdminMessageCommand));
         }
+
         protected override void LoadDefaultMessages()
         {
             lang.RegisterMessages(new Dictionary<string, string>
@@ -48,30 +49,30 @@ namespace Oxide.Plugins
                 string receiverName = args[0];
 
                 string message = args[1];
-                for (int i = 2; i < args.Length; i++)
+                for (var i = 2; i < args.Length; i++)
                     message += " " + args[i];
 
                 IPlayer receiver = null;
-                foreach(IPlayer connectedPlayer in covalence.Players.Connected)
+                foreach (IPlayer connectedPlayer in covalence.Players.Connected)
                 {
-                    if (connectedPlayer.Name == receiverName) receiver = connectedPlayer;
+                    if (connectedPlayer.Name == receiverName)
+                        receiver = connectedPlayer;
                 }
-                if (receiver != null)
-                {
-                    if (receiver.IsConnected)
-                    {
-                        receiver.Reply(string.Format(lang.GetMessage("SentAdminToYou", this, receiver.Id), message));
-                        player.Reply(string.Format(lang.GetMessage("SentYouToUser", this, player.Id), receiverName, message));
-                    }
-                    else
-                    {
-                        player.Reply(lang.GetMessage("NoUserFoundOrOnline", this, player.Id));
-                    }
-                }
-                else
+
+                if (receiver == null)
                 {
                     player.Reply(lang.GetMessage("NoUserFoundOrOnline", this, player.Id));
+                    return;
                 }
+
+                if (!receiver.IsConnected)
+                {
+                    player.Reply(lang.GetMessage("NoUserFoundOrOnline", this, player.Id));
+                    return;
+                }
+
+                receiver.Reply(string.Format(lang.GetMessage("SentAdminToYou", this, receiver.Id), message));
+                player.Reply(string.Format(lang.GetMessage("SentYouToUser", this, player.Id), receiverName, message));
             }
         }
 
@@ -80,29 +81,31 @@ namespace Oxide.Plugins
             if (args.Length <= 0)
             {
                 player.Reply(lang.GetMessage("NoMessageProvided", this, player.Id));
+                return;
             }
-            else if (args.Length > 0)
+            
+            string message = args[0];
+            for (var i = 1; i < args.Length; i++)
+                message += " " + args[i];
+
+            var wasSent = false;
+
+            foreach (IPlayer connectedPlayer in covalence.Players.Connected)
             {
-                string message = args[0];
-                for (int i = 1; i < args.Length; i++)
-                    message += " " + args[i];
+                if (!connectedPlayer.HasPermission(PRIVATE_ADMIN_MESSAGE_RECEIVE))
+                    continue;
 
-                bool wasSent = false;
+                connectedPlayer.Reply(string.Format(lang.GetMessage("SentUserToAdmin", this, connectedPlayer.Id),
+                    player.Name, message));
 
-                foreach (IPlayer connectedPlayer in covalence.Players.Connected)
-                {
-                    if (connectedPlayer.HasPermission(PRIVATE_ADMIN_MESSAGE_RECEIVE))
-                    {
-                        connectedPlayer.Reply(string.Format(lang.GetMessage("SentUserToAdmin", this, connectedPlayer.Id), player.Name, message));
-                        if (!wasSent) wasSent = true;
-                    }
-                }
-
-                if (wasSent)
-                    player.Reply(string.Format(lang.GetMessage("SentYouToAdmin", this, player.Id), message));
-                else
-                    player.Reply(string.Format(lang.GetMessage("NoAdminOnline", this, player.Id), message));
+                wasSent = true;
             }
+
+            player.Reply(wasSent
+                ? string.Format(lang.GetMessage("SentYouToAdmin", this, player.Id), message)
+                : string.Format(lang.GetMessage("NoAdminOnline", this, player.Id)));
+
+            Log(string.Format(lang.GetMessage("SentUserToAdmin", this), player.Name, message));
         }
     }
 }
