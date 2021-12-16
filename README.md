@@ -11,6 +11,10 @@ Private Admin Messages allows admins to send private messages to players via con
   
 * `/pam <name> <message>` - Send private message as admin to players
 * `/am <message>` - Send private message to admins
+
+## Console Commands  
+  
+* `privateadminmessage.pam <name> <message>` - Send private message as admin to players
   
 ## Credits
 * Icons created by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/de/)
