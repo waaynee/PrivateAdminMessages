@@ -8,10 +8,6 @@
 * `pam <name> <message>` - Send private message as admin to players
 * `am <message>` - Send private message to admins
 
-## Console Commands  
-
-* `privateadminmessage.pam <name> <message>` - Send private message as admin to players
-
 ## Localization
 
 ## Credits
